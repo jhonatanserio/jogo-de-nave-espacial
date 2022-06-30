@@ -11,6 +11,10 @@ var laserjogador
 var laser2jogador
 var laserinimigo
 var enemy1
+var enemyGroup
+var inicio
+var fim
+var estadoDoJogo=inicio
 
 var enemyOne1, enemyTwo2, laser1
 
@@ -34,7 +38,7 @@ function preload() {
 function setup() {
   canvas = createCanvas(800, 600);
   starsGroup = new Group();
-
+  enemyGroup = createGroup();
    
  
 
@@ -49,12 +53,7 @@ function draw(){
 
   background("black")
   drawSprites();
-
-
-  /*if(stars.y > 600){
-   stars.y=stars.height/8;
-  } */
-
+if(estadoDoJogo==inicio){
 
   if(keyDown(LEFT_ARROW)){
     jogador.x=jogador.x-4
@@ -72,17 +71,17 @@ function draw(){
   } else if(ran == 2){
     enemyOne(velocityX = -2)
   }}
-  if(laserjogador.isTouching(enemy1) || laser2jogador.isTouching(enemy1)){
-    enemy1.destroy();
+if(enemyGroup.isTouching(laserjogador) || enemyGroup.isTouching(laser2jogador)){
+    estadoDoJogo=fim
   }
-
-
-  /*for (var j = 0; j < totalUV; j++) {
-    if (grupoRaiosUV.get(j) != undefined && grupoRaiosUV.get(j).collide(ozonio)) {
-      grupoRaiosUV.get(j).destroy();
-      grupoRaiosUV.destroyEach();
-    }
-  }*/
+if(jogador.isTouching(laserinimigo)){
+  estadoDoJogo=fim
+}
+}
+else if(estadoDoJogo==fim){
+  enemyGroup.destroyEach()
+  jogador.destroy()
+}
 }
 
 function enemyOne(velocity){
@@ -90,7 +89,6 @@ function enemyOne(velocity){
   enemy1 = createSprite(600, 40);
 
   enemy1.addAnimation("ENEMYONE", enemyOne1);
- //enemyOne1.frameDelay = 5
   enemy1.scale = 0.13;
   enemy1.velocityX = velocity;
   
@@ -102,7 +100,7 @@ function enemyOne(velocity){
   laserinimigo.addAnimation("laser", laser1);
   laserinimigo.scale = 0.2;
   laserinimigo.velocityY= +5
-
+  enemyGroup.add(enemy1)
 
 }
 
